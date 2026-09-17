@@ -28,4 +28,10 @@ public class UserService {
                 .map(UserProfileResponse::fromEntity)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cannot find user with username: " + username));
     }
+
+    public UserProfileResponse getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .map(UserProfileResponse::fromEntity)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cannot find user with email: " + email));
+    }
 }
