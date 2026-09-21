@@ -50,6 +50,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         problemDetail.setTitle("Unknown Resource");
         problemDetail.setType(URI.create("https://mogavault.dev/errors/not-found"));
         problemDetail.setProperty("timestamp", Instant.now());
+
         return problemDetail;
     }
 
