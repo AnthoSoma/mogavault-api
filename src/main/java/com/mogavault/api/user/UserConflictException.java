@@ -4,12 +4,12 @@ import com.mogavault.api.common.exception.ConflictException;
 
 import java.util.Map;
 
-public class UserAlreadyExistsException extends ConflictException {
+public class UserConflictException extends ConflictException {
 
     private final String field;
     private final String rejectedValue;
 
-    public UserAlreadyExistsException(String field, String rejectedValue, String message) {
+    public UserConflictException(String field, String rejectedValue, String message) {
         super(message);
         this.field = field;
         this.rejectedValue = rejectedValue;
