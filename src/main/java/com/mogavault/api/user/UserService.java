@@ -20,19 +20,19 @@ public class UserService {
     public UserProfileResponse getUserById(UUID id) {
         return userRepository.findById(id)
                 .map(UserProfileResponse::fromEntity)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cannot find user with id: " + id));
+                .orElseThrow(() -> new UserNotFoundException(id));
     }
 
     public UserProfileResponse getUserByUsername(String username) {
         return userRepository.findByUsername(username)
                 .map(UserProfileResponse::fromEntity)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cannot find user with username: " + username));
+                .orElseThrow(() -> new UserNotFoundException(username));
     }
 
     public UserProfileResponse getUserByEmail(String email) {
         return userRepository.findByEmail(email)
                 .map(UserProfileResponse::fromEntity)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cannot find user with email: " + email));
+                .orElseThrow(() -> new UserNotFoundException(email));
     }
 
     @Transactional
