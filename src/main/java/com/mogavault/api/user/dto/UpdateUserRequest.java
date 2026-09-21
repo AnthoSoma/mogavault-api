@@ -1,4 +1,4 @@
-package com.mogavault.api.user;
+package com.mogavault.api.user.dto;
 
 import jakarta.validation.constraints.Size;
 

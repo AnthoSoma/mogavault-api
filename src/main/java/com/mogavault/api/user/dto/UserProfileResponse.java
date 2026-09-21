@@ -1,4 +1,6 @@
-package com.mogavault.api.user;
+package com.mogavault.api.user.dto;
+
+import com.mogavault.api.user.User;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;

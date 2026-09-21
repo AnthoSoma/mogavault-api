@@ -1,4 +1,4 @@
-package com.mogavault.api.user;
+package com.mogavault.api.user.exception;
 
 import com.mogavault.api.common.exception.ConflictException;
 

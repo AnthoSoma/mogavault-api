@@ -1,5 +1,8 @@
 package com.mogavault.api.user;
 
+import com.mogavault.api.user.dto.CreateUserRequest;
+import com.mogavault.api.user.dto.UpdateUserRequest;
+import com.mogavault.api.user.dto.UserProfileResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
