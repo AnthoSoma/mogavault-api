@@ -1,9 +1,7 @@
 package com.mogavault.api.user;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
 
@@ -62,7 +60,7 @@ public class UserService {
     @Transactional
     public UserProfileResponse updateUser(UUID id, UpdateUserRequest request) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Unknown user"));
+                .orElseThrow(() -> new UserNotFoundException(id));
 
         if (request.avatarUrl() != null) {
             user.setAvatarUrl(request.avatarUrl());
@@ -78,7 +76,7 @@ public class UserService {
     @Transactional
     public void deleteUser(UUID id) {
         if (!userRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unknown user");
+            throw new UserNotFoundException(id);
         }
         userRepository.deleteById(id);
     }
