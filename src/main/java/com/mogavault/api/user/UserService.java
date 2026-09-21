@@ -34,4 +34,28 @@ public class UserService {
                 .map(UserProfileResponse::fromEntity)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cannot find user with email: " + email));
     }
+
+    @Transactional
+    public UserProfileResponse createUser(CreateUserRequest request) {
+        if (userRepository.findByUsername(request.username()).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "There is already a user with username: " + request.username());
+        }
+        if (userRepository.findByEmail(request.email()).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "There is already a user with email: " + request.email());
+        }
+
+        // TODO: hacher le mot de passe quand Spring Security sera en place (BCrypt/Argon2)
+        String temporaryHash = "{noop}" + request.password();
+
+        User user = new User(
+                request.username(),
+                request.email(),
+                temporaryHash,
+                request.avatarUrl(),
+                request.bio()
+        );
+
+        User savedUser = userRepository.save(user);
+        return UserProfileResponse.fromEntity(savedUser);
+    }
 }
