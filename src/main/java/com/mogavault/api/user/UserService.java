@@ -58,4 +58,28 @@ public class UserService {
         User savedUser = userRepository.save(user);
         return UserProfileResponse.fromEntity(savedUser);
     }
+
+    @Transactional
+    public UserProfileResponse updateUser(UUID id, UpdateUserRequest request) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Unknown user"));
+
+        if (request.avatarUrl() != null) {
+            user.setAvatarUrl(request.avatarUrl());
+        }
+
+        if (request.bio() != null) {
+            user.setBio(request.bio());
+        }
+
+        return UserProfileResponse.fromEntity(user);
+    }
+
+    @Transactional
+    public void deleteUser(UUID id) {
+        if (!userRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unknown user");
+        }
+        userRepository.deleteById(id);
+    }
 }
