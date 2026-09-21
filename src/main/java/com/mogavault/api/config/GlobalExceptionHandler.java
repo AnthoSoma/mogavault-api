@@ -1,11 +1,11 @@
 package com.mogavault.api.config;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ProblemDetail;
-import org.springframework.http.ResponseEntity;
+import com.mogavault.api.common.exception.ConflictException;
+import com.mogavault.api.common.exception.ResourceNotFoundException;
+import org.springframework.http.*;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -39,5 +39,35 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         problemDetail.setProperty("errors", invalidFields);
 
         return ResponseEntity.status(status).body(problemDetail);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ProblemDetail handleResourceNotFound(ResourceNotFoundException ex) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
+                HttpStatus.NOT_FOUND,
+                ex.getMessage()
+        );
+        problemDetail.setTitle("Unknown Resource");
+        problemDetail.setType(URI.create("https://mogavault.dev/errors/not-found"));
+        problemDetail.setProperty("timestamp", Instant.now());
+        return problemDetail;
+    }
+
+    @ExceptionHandler(ConflictException.class)
+    public ProblemDetail handleConflict(ConflictException ex) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
+                HttpStatus.CONFLICT,
+                ex.getMessage()
+        );
+        problemDetail.setTitle("Resource conflict");
+        problemDetail.setType(URI.create("https://mogavault.dev/errors/conflict"));
+        problemDetail.setProperty("timestamp", Instant.now());
+
+        Map<String, Object> details = ex.getDetails();
+        if (!details.isEmpty()) {
+            problemDetail.setProperty("details", details);
+        }
+
+        return problemDetail;
     }
 }

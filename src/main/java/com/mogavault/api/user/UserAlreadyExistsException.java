@@ -1,6 +1,10 @@
 package com.mogavault.api.user;
 
-public class UserAlreadyExistsException extends RuntimeException {
+import com.mogavault.api.common.exception.ConflictException;
+
+import java.util.Map;
+
+public class UserAlreadyExistsException extends ConflictException {
 
     private final String field;
     private final String rejectedValue;
@@ -17,5 +21,13 @@ public class UserAlreadyExistsException extends RuntimeException {
 
     public String getRejectedValue() {
         return rejectedValue;
+    }
+
+    @Override
+    public Map<String, Object> getDetails() {
+        return Map.of(
+                "field", field,
+                "rejectedValue", rejectedValue
+        );
     }
 }
