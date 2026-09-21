@@ -38,10 +38,10 @@ public class UserService {
     @Transactional
     public UserProfileResponse createUser(CreateUserRequest request) {
         if (userRepository.findByUsername(request.username()).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "There is already a user with username: " + request.username());
+            throw new UserAlreadyExistsException("username", request.username(), "There is already a user with username: " + request.username());
         }
         if (userRepository.findByEmail(request.email()).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "There is already a user with email: " + request.email());
+            throw new UserAlreadyExistsException("email", request.email(), "There is already a user with email: " + request.email());
         }
 
         // TODO: hacher le mot de passe quand Spring Security sera en place (BCrypt/Argon2)
