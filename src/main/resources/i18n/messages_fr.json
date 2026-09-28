@@ -1,25 +1,37 @@
 {
   "ui": {
-    "common": {
+    "actions": {
       "save": "Enregistrer",
       "cancel": "Annuler",
-      "delete": "Supprimer",
-      "nav": {
-        "home": "Accueil",
-        "games": "Catalogue",
-        "profile": "Profil"
-      }
+      "delete": "Supprimer"
+    },
+    "nav": {
+      "home": "Accueil",
+      "games": "Catalogue",
+      "profile": "Profil"
     }
   },
   "validation": {
-    "required": "Ce champ est obligatoire.",
-    "email": "Format d'adresse email invalide.",
-    "min_length": "Le texte est trop court."
+    "user": {
+      "username": {
+        "required": "Le nom d'utilisateur est obligatoire.",
+        "size": "Le nom d'utilisateur doit contenir entre 3 et 50 caractères."
+      },
+      "email": {
+        "required": "L'adresse email est obligatoire.",
+        "format": "Format d'adresse email invalide."
+      },
+      "password": {
+        "required": "Le mot de passe est obligatoire.",
+        "size": "Le mot de passe doit contenir au moins 8 caractères."
+      }
+    }
   },
   "errors": {
-    "network": {
-      "unavailable": "Impossible de joindre le serveur. Veuillez vérifier votre connexion."
-    },
-    "unknown": "Une erreur inattendue est survenue."
+    "user": {
+      "already_exists": "Ce nom d'utilisateur ou cet email est déjà utilisé.",
+      "not_found": "Utilisateur introuvable.",
+      "bad_credentials": "Identifiants incorrects."
+    }
   }
 }
