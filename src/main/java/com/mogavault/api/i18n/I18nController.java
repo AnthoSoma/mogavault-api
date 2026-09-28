@@ -6,6 +6,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.CacheControl;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,10 +20,14 @@ public class I18nController {
 
     @GetMapping(value = "/**", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Resource> getTranslations(HttpServletRequest request) {
-        // Extrait tout ce qui se trouve après "/api/v1/i18n/"
+        // On prend la route complète
         String path = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
-        String prefix = "/api/v1/i18n/";
-        String relativePath = path.startsWith(prefix) ? path.substring(prefix.length()) : path;
+        // Récupère le pattern déclaré sur la route (ex: /api/v1/i18n/**)
+        String bestMatchingPattern = (String) request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
+
+        // Extrait dynamiquement tout ce qui correspond au wildcard "/**"
+        AntPathMatcher pathMatcher = new AntPathMatcher();
+        String relativePath = pathMatcher.extractPathWithinPattern(bestMatchingPattern, path);
 
         // Découpe le chemin pour isoler le fichier de langue (dernier segment)
         String[] parts = relativePath.split("/");
