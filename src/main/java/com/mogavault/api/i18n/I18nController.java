@@ -1,16 +1,14 @@
 package com.mogavault.api.i18n;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.CacheControl;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.HandlerMapping;
 
 import java.time.Duration;
 
@@ -18,16 +16,10 @@ import java.time.Duration;
 @RequestMapping("/api/v1/i18n")
 public class I18nController {
 
-    @GetMapping(value = "/**", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Resource> getTranslations(HttpServletRequest request) {
-        // On prend la route complète
-        String path = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
-        // Récupère le pattern déclaré sur la route (ex: /api/v1/i18n/**)
-        String bestMatchingPattern = (String) request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
-
-        // Extrait dynamiquement tout ce qui correspond au wildcard "/**"
-        AntPathMatcher pathMatcher = new AntPathMatcher();
-        String relativePath = pathMatcher.extractPathWithinPattern(bestMatchingPattern, path);
+    @GetMapping(value = "/{*path}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Resource> getTranslations(@PathVariable String path) {
+        // "path" contient la suite de l'URL avec un slash initial (ex: "/admin/users/fr" ou "/fr")
+        String relativePath = path.startsWith("/") ? path.substring(1) : path;
 
         // Découpe le chemin pour isoler le fichier de langue (dernier segment)
         String[] parts = relativePath.split("/");
