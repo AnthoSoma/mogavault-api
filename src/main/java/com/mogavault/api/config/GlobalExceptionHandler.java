@@ -2,6 +2,8 @@ package com.mogavault.api.config;
 
 import com.mogavault.api.common.exception.ConflictException;
 import com.mogavault.api.common.exception.ResourceNotFoundException;
+import com.mogavault.api.common.exception.ValidationErrorItem;
+import jakarta.validation.ConstraintViolation;
 import org.springframework.http.*;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -12,11 +14,15 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.net.URI;
 import java.time.Instant;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+
+    private static final Set<String> IGNORED_ATTRIBUTES = Set.of("message", "groups", "payload");
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
@@ -31,14 +37,35 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         problemDetail.setType(URI.create("https://mogavault.dev/errors/validation-error"));
         problemDetail.setProperty("timestamp", Instant.now());
 
-        Map<String, String> invalidFields = new HashMap<>();
+        Map<String, ValidationErrorItem> invalidFields = new HashMap<>();
         for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
-            invalidFields.put(fieldError.getField(), fieldError.getDefaultMessage());
+            Map<String, Object> params = extractConstraintAttributes(fieldError);
+            invalidFields.put(
+                    fieldError.getField(),
+                    new ValidationErrorItem(fieldError.getDefaultMessage(), params)
+            );
         }
 
         problemDetail.setProperty("errors", invalidFields);
 
         return ResponseEntity.status(status).body(problemDetail);
+    }
+
+    private Map<String, Object> extractConstraintAttributes(FieldError fieldError) {
+        try {
+            ConstraintViolation<?> violation = fieldError.unwrap(ConstraintViolation.class);
+            Map<String, Object> attributes = violation.getConstraintDescriptor().getAttributes();
+
+            Map<String, Object> filteredParams = new HashMap<>();
+            for (Map.Entry<String, Object> entry : attributes.entrySet()) {
+                if (!IGNORED_ATTRIBUTES.contains(entry.getKey())) {
+                    filteredParams.put(entry.getKey(), entry.getValue());
+                }
+            }
+            return filteredParams;
+        } catch (Exception e) {
+            return Collections.emptyMap();
+        }
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
