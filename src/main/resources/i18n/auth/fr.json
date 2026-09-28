@@ -1,0 +1,41 @@
+{
+  "ui": {
+    "login": {
+      "title": "MogaVault",
+      "subtitle": "Ton hub gaming centralisé",
+      "steam_btn": "Continuer avec Steam",
+      "discord_btn": "Continuer avec Discord",
+      "separator": "ou par identifiant",
+      "email_label": "Email ou pseudo",
+      "email_placeholder": "Username",
+      "password_label": "Mot de passe",
+      "forgot_password": "Oublié ?",
+      "remember_me": "Se souvenir de moi",
+      "submit_btn": "Se connecter",
+      "loading_btn": "Connexion...",
+      "no_account": "Pas de compte ?",
+      "register_link": "Créer un profil"
+    }
+  },
+  "validation": {
+    "username": {
+      "required": "Le nom d'utilisateur est obligatoire.",
+      "size": "Le nom d'utilisateur doit contenir entre 3 et 50 caractères."
+    },
+    "email": {
+      "required": "L'adresse email est obligatoire.",
+      "format": "Format d'adresse email invalide."
+    },
+    "password": {
+      "required": "Le mot de passe est obligatoire.",
+      "size": "Le mot de passe doit contenir au moins 8 caractères."
+    }
+  },
+  "errors": {
+    "login": {
+      "already_exists": "Ce nom d'utilisateur ou cet email est déjà utilisé.",
+      "not_found": "Utilisateur introuvable.",
+      "bad_credentials": "Identifiants incorrects."
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "ui": {
+    "common": {
+      "save": "Enregistrer",
+      "cancel": "Annuler",
+      "delete": "Supprimer",
+      "nav": {
+        "home": "Accueil",
+        "games": "Catalogue",
+        "profile": "Profil"
+      }
+    }
+  },
+  "validation": {
+    "required": "Ce champ est obligatoire.",
+    "email": "Format d'adresse email invalide.",
+    "min_length": "Le texte est trop court."
+  },
+  "errors": {
+    "network": {
+      "unavailable": "Impossible de joindre le serveur. Veuillez vérifier votre connexion."
+    },
+    "unknown": "Une erreur inattendue est survenue."
+  }
+}
