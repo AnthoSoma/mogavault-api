@@ -45,11 +45,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ProblemDetail handleResourceNotFound(ResourceNotFoundException ex) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
                 HttpStatus.NOT_FOUND,
-                ex.getMessage()
+                ex.getMessageKey()
         );
-        problemDetail.setTitle("Unknown Resource");
+        problemDetail.setTitle("Resource not found");
         problemDetail.setType(URI.create("https://mogavault.dev/errors/not-found"));
         problemDetail.setProperty("timestamp", Instant.now());
+
+        // Ajout des paramètres dynamiques dans le payload d'erreur
+        if (!ex.getMessageParams().isEmpty()) {
+            problemDetail.setProperty("params", ex.getMessageParams());
+        }
 
         return problemDetail;
     }

@@ -29,9 +29,8 @@
   },
   "errors": {
     "user": {
-      "already_exists": "Ce nom d'utilisateur ou cet email est déjà utilisé.",
-      "not_found": "Utilisateur introuvable.",
-      "bad_credentials": "Identifiants incorrects."
+      "not_found_by_id": "L'utilisateur avec l'identifiant {{ id }} est introuvable.",
+      "not_found_by_username": "L'utilisateur avec le pseudo {{ username }} est introuvable."
     }
   }
 }
